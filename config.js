@@ -1,6 +1,20 @@
 require('dotenv').config();
 
-const baseUrl = 'https://api.yescoin.gold'
+const env = process.env;
+const baseUrl = 'https://api.yescoin.gold';
+
+const urls = {
+    login: `${baseUrl}/user/login`,
+    collectCoin: `${baseUrl}/game/collectCoin`,
+    accountInfo: `${baseUrl}/account/getAccountInfo`,
+}
+
+const taps = { 'min': parseInt(env.MIN_CLICK), 'max': parseInt(env.MAX_CLICK), 'boost': parseInt(env.BOOST) };
+const intervals = { 'min': parseInt(env.MIN_INTERVAL), 'max': parseInt(env.MAX_INTERVAL), 'boost': parseInt(env.BOOST) };
+
+function buildAuthQuery() {
+    return `user={"id":${process.env.USER_ID},"first_name":"${process.env.FIRST_NAME}","last_name":"${process.env.LAST_NAME}","username":"${process.env.USERNAME}","language_code":"${process.env.LANGUAGE_CODE}","allows_write_to_pm":${process.env.ALLOWS_WRITE_TO_PM}}&chat_instance=${process.env.CHAT_INSTANCE}&chat_type=${process.env.CHAT_TYPE}&auth_date=${process.env.AUTH_DATE}&hash=${process.env.HASH}`;
+}
 
 function getHeaders(data = {}, headers = {}, ContentLength = null) {
 
@@ -23,15 +37,4 @@ function getHeaders(data = {}, headers = {}, ContentLength = null) {
 
 }
 
-function buildAuthQuery() {
-  return `user={"id":${process.env.USER_ID},"first_name":"${process.env.FIRST_NAME}","last_name":"${process.env.LAST_NAME}","username":"${process.env.USERNAME}","language_code":"${process.env.LANGUAGE_CODE}","allows_write_to_pm":${process.env.ALLOWS_WRITE_TO_PM}}&chat_instance=${process.env.CHAT_INSTANCE}&chat_type=${process.env.CHAT_TYPE}&auth_date=${process.env.AUTH_DATE}&hash=${process.env.HASH}`;
-}
-
-const urls = {
-    login: `${baseUrl}/user/login`,
-    collectCoin: `${baseUrl}/game/collectCoin`,
-    accountInfo: `${baseUrl}/account/getAccountInfo`,
-}
-
-
-module.exports = { urls, getHeaders, buildAuthQuery }
+module.exports = { taps, intervals, urls, getHeaders, buildAuthQuery }
